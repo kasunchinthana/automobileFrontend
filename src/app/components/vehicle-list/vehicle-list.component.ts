@@ -3,6 +3,7 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { Vehicle } from 'src/app/model/vehicle';
 import { VehicleService } from 'src/app/services/vehicle.service';
+import {MatSnackBar} from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-vehicle-list',
@@ -16,26 +17,26 @@ export class VehicleListComponent implements OnInit {
   currentVehicle?: Vehicle;
   currentIndex = -1;
   car_model = '';
-  displayedColumns: string[] = ['first_name', 'last_name','email','car_make','car_model','manufactured_date'];
-  dataSource : Vehicle[];
+  displayedColumns: string[] = ['first_name', 'last_name','email','car_make','car_model','manufactured_date','deleteAction'];
+ // dataSource : Vehicle[];
   // datasource 
-  //dataSource = new MatTableDataSource<Vehicle>(ELEMENT_DATA);
+  dataSource = new MatTableDataSource<any>([]);
   //dataSource = new MatTableDataSource<Vehicle>[];
   @ViewChild(MatPaginator) paginator: MatPaginator;
   
-  constructor(private vehicleService:VehicleService) { }
+  constructor(private vehicleService:VehicleService,private _snackBar: MatSnackBar) { }
 
   ngOnInit(): void {
     this.retrieveVehicle();
   }
   ngAfterViewInit() {
-   // this.dataSource.paginator = this.paginator;
+   this.dataSource.paginator = this.paginator;
   }
+  
   retrieveVehicle(): void {
-    this.vehicleService.getAll().subscribe(
-        data => {
-          this.vehicles = data;
-          this.dataSource = data;
+    this.vehicleService.getAll().subscribe( (data:any[]) => {
+      this.vehicles = data;
+          this.dataSource.data = data;
           console.log(data);
         },
         error => {
@@ -49,9 +50,8 @@ export class VehicleListComponent implements OnInit {
     this.currentIndex = -1;
   }
 
-  onRowClicked(row): void {
-    this.currentVehicle = row;
-    this.currentIndex = row.id;
+  onRowClicked(index): void {
+    this.currentIndex = index;
   }
   searchCarModel(): void {
     this.vehicleService.findByCarModel(this.car_model) .subscribe(
@@ -63,5 +63,42 @@ export class VehicleListComponent implements OnInit {
         console.log(error);
       });
   }
+  update(index):void{
+   
+    let updatedVehicle = this.vehicles[index];
+    this.vehicleService.update(updatedVehicle.id, updatedVehicle)
+      .subscribe(
+        response => {
+          console.log(response);
+         // this.message = response.id.toString();
+        },
+        error => {
+          console.log(error);
+        });
+        this._snackBar.open('succesfully updated', '', {
+          duration: 2000,
+        });
+        this.currentIndex=-1;
+  }
 
+  delete(index): void {
+    let updatedVehicle = this.vehicles[index];
+    this.vehicleService.delete(this.currentVehicle.id)
+      .subscribe(
+        response => {
+          console.log(response);
+          this._snackBar.open('succesfully deleted', '', {
+            duration: 2000,
+          });
+          this.currentIndex=-1;
+         // this.router.navigate(['api/vehicle']);
+        },
+        error => {
+          console.log(error);
+          this._snackBar.open('error', '', {
+            duration: 2000,
+          });
+          this.currentIndex=-1;
+        });
+      }
 }

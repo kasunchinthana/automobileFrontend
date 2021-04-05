@@ -12,6 +12,9 @@ import { MatTableModule } from '@angular/material/table';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations'  
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { UploadFilesComponent } from './components/upload-files/upload-files.component';
+import { CdkTableModule } from '@angular/cdk/table';
+import { MatIconModule} from '@angular/material/icon';
+import {MatSnackBarModule} from '@angular/material/snack-bar';
 
 @NgModule({
   declarations: [
@@ -27,7 +30,10 @@ import { UploadFilesComponent } from './components/upload-files/upload-files.com
     FormsModule,
     MatTableModule,
     BrowserAnimationsModule,
-    MatPaginatorModule
+    MatPaginatorModule,
+    CdkTableModule,
+    MatIconModule,
+    MatSnackBarModule
   ],
   providers: [],
   bootstrap: [AppComponent]

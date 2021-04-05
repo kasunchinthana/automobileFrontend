@@ -1,0 +1,48 @@
+<div style="width: 400px; margin: auto;">
+    <div *ngIf="currentVehicle" class="edit-form">
+      <h4>Vehicle</h4>
+      <form>
+        <div class="form-group">
+          <label for="first_name:">first_name:</label>
+          <input
+            type="text"
+            class="form-control"
+            id="first_name:"
+            [(ngModel)]="currentVehicle.first_name"
+            name="first_name:"
+          />
+        </div>
+        <div class="form-group">
+          <label for="last_name">last_name</label>
+          <input
+            type="text"
+            class="form-control"
+            id="last_name"
+            [(ngModel)]="currentVehicle.last_name"
+            name="last_name"
+          />
+        </div>
+  
+       
+      </form>
+  
+  
+      <button class="badge badge-danger mr-2" (click)="deleteVehicle()">
+        Delete
+      </button>
+  
+      <button
+        type="submit"
+        class="badge badge-success"
+        (click)="updateVehicle()"
+      >
+        Update
+      </button>
+      <p>{{ message }}</p>
+    </div>
+  
+    <div *ngIf="!currentVehicle">
+      <br />
+      <p>Cannot access this Vehicle...</p>
+    </div>
+  </div>

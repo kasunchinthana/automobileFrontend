@@ -1,0 +1,21 @@
+ {
+    "/api-proxy/": {
+        "target":"http://localhost:3000/", 
+      "secure": false,
+      "logLevel": "info",
+      "changeOrigin": true,
+      "pathRewrite": {
+        "/api-proxy": ""
+      }
+    },
+    "/api/": {
+    "target":"http://localhost:3000/", 
+      "secure": false,
+      "logLevel": "info",
+      "changeOrigin": true,
+      "pathRewrite": {
+        "/api": ""
+      }
+    }
+  }
+  

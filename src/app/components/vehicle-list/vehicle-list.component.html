@@ -20,63 +20,22 @@
     </div>
 
     <div >
-      <h4>Vehicle List</h4>
-     <!--  <ul class="list-group">
-        <li
-          class="list-group-item"
-          *ngFor="let vehicle of vehicles; let i = index"
-          [class.active]="i == currentIndex"
-          (click)="setActiveVehicle(vehicle, i)"
-        >
-          {{ vehicle.first_name }}
-
-          {{ vehicle.last_name }}
-        </li>
-        
-      </ul> -->
-      
-      
+      <h4>Vehicle List</h4>     
     </div>
-    <div >
-      <div *ngIf="currentVehicle">
-        <h4>Vehicle</h4>
-        <div>
-          <label><strong>Title:</strong></label> {{ currentVehicle.last_name }}
-        </div>
-        <div>
-          <label><strong>last_name:</strong></label>
-          {{ currentVehicle.last_name }}
-        </div>
-        <!-- <div>
-          <label><strong>Status:</strong></label>
-          {{ currentVehicle.published ? "Published" : "Pending" }}
-        </div> -->
-  
-        <a class="badge badge-warning" routerLink="{{ currentVehicle.id }}">
-          Edit
-        </a>
-      </div>
+   
+      
   
       <div *ngIf="!currentVehicle">
         <br />
         <p>Please click on a Vehicle...</p>
       </div>
-    </div>
+
   </div>
-  <div class="container" style="width:600px">
-    <div style="margin: 20px">
-      <h3>Auto mobile CSV</h3>
-    </div>
   
-    <app-upload-files></app-upload-files>
-  </div>
   <div>
     <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
 
-      <!--- Note that these columns can be defined in any order.
-            The actual rendered columns are set as a property on the row definition" -->
-    
-      <!-- Position Column -->
+     
       <ng-container matColumnDef="first_name">
         <th mat-header-cell *matHeaderCellDef> first name. </th>
         <td mat-cell *matCellDef="let element; let i= index;">
@@ -130,3 +89,4 @@
     </table>
     <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
   </div>
+  

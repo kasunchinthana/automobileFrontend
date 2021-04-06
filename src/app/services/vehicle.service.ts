@@ -35,6 +35,6 @@ export class VehicleService {
   }
 
   findByCarModel(car_model: any): Observable<Vehicle[]> {
-    return this.http.get<Vehicle[]>(`${baseUrl}?carModel=${car_model}`);
+    return this.http.get<Vehicle[]>(`${baseUrl}/carModel/${car_model}`);
   }
 }

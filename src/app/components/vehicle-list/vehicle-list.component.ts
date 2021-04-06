@@ -54,10 +54,11 @@ export class VehicleListComponent implements OnInit {
     this.currentIndex = index;
   }
   searchCarModel(): void {
-    this.vehicleService.findByCarModel(this.car_model) .subscribe(
-      data => {
+    //this.dataSource.data = [];
+    this.vehicleService.findByCarModel(this.car_model) .subscribe((data:any[])  => {
         this.vehicles = data;
-        console.log(data);
+          this.dataSource.data = data;
+          console.log(data);
       },
       error => {
         console.log(error);
@@ -70,15 +71,20 @@ export class VehicleListComponent implements OnInit {
       .subscribe(
         response => {
           console.log(response);
-         // this.message = response.id.toString();
+          this._snackBar.open('succesfully updated', '', {
+            duration: 2000,
+          });
+          this.currentIndex=-1;
         },
         error => {
           console.log(error);
+          this._snackBar.open('error occured', '', {
+            duration: 2000,
+          });
+          this.currentIndex=-1;
         });
-        this._snackBar.open('succesfully updated', '', {
-          duration: 2000,
-        });
-        this.currentIndex=-1;
+       
+        
   }
 
   delete(index): void {

@@ -20,7 +20,7 @@ export class VehicleListComponent implements OnInit {
   displayedColumns: string[] = ['first_name', 'last_name','email','car_make','car_model','manufactured_date','deleteAction'];
  // dataSource : Vehicle[];
   // datasource 
-  dataSource = new MatTableDataSource<any>([]);
+  dataSource = new MatTableDataSource<Vehicle>([]);
   //dataSource = new MatTableDataSource<Vehicle>[];
   @ViewChild(MatPaginator) paginator: MatPaginator;
   
@@ -34,7 +34,7 @@ export class VehicleListComponent implements OnInit {
   }
   
   retrieveVehicle(): void {
-    this.vehicleService.getAll().subscribe( (data:any[]) => {
+    this.vehicleService.getAll().subscribe( (data:Vehicle[]) => {
       this.vehicles = data;
           this.dataSource.data = data;
           console.log(data);
@@ -43,6 +43,7 @@ export class VehicleListComponent implements OnInit {
           console.log(error);
         });
   }
+  
 
   refreshList(): void {
     this.retrieveVehicle();
@@ -54,11 +55,28 @@ export class VehicleListComponent implements OnInit {
     this.currentIndex = index;
   }
   searchCarModel(): void {
-    //this.dataSource.data = [];
-    this.vehicleService.findByCarModel(this.car_model) .subscribe((data:any[])  => {
-        this.vehicles = data;
-          this.dataSource.data = data;
-          console.log(data);
+    this.vehicleService.findByCarModel(this.car_model).subscribe((res:any ) => {
+    
+        //this.dataSource = new MatTableDataSource(data);
+        if(res.length===undefined){
+        this.dataSource.data  = [{
+          age_of_vehicle: res.age_of_vehicle,
+          car_make: res.car_make,
+          car_model: res.car_model,
+          email: res.email,
+          first_name: res.first_name,
+          id: res.id,
+          last_name: res.last_name,
+          manufactured_date: res.manufactured_date,
+          vin_number: res.vin_number,
+        }];
+        this.vehicles = res;
+        }else{
+          this.vehicles = res;
+          this.dataSource.data=res;
+        }
+     
+        
       },
       error => {
         console.log(error);

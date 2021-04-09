@@ -1,48 +1,92 @@
-<div style="width: 400px; margin: auto;">
-    <div *ngIf="currentVehicle" class="edit-form">
-      <h4>Vehicle</h4>
-      <form>
-        <div class="form-group">
-          <label for="first_name:">first_name:</label>
-          <input
-            type="text"
-            class="form-control"
-            id="first_name:"
-            [(ngModel)]="currentVehicle.first_name"
-            name="first_name:"
-          />
-        </div>
-        <div class="form-group">
-          <label for="last_name">last_name</label>
-          <input
-            type="text"
-            class="form-control"
-            id="last_name"
-            [(ngModel)]="currentVehicle.last_name"
-            name="last_name"
-          />
-        </div>
-  
-       
-      </form>
-  
-  
-      <button class="badge badge-danger mr-2" (click)="deleteVehicle()">
-        Delete
-      </button>
-  
-      <button
-        type="submit"
-        class="badge badge-success"
-        (click)="updateVehicle()"
-      >
-        Update
-      </button>
-      <p>{{ message }}</p>
-    </div>
-  
-    <div *ngIf="!currentVehicle">
-      <br />
-      <p>Cannot access this Vehicle...</p>
+<div>
+  <div class="col-md-8">
+    <div class="input-group mb-3">
+       <input
+        type="text"
+        class="form-control"
+        placeholder="Search by car_model"
+        [(ngModel)]="car_model"
+      />
+      <div class="input-group-append">
+        <button
+          class="btn btn-outline-secondary"
+          type="button"
+          (click)="searchCarModel()"
+        >
+          Search
+        </button> 
+      </div>
     </div>
   </div>
+
+  <div >
+    <h4>Vehicle List</h4>     
+  </div>
+ 
+    
+
+    <div *ngIf="!currentVehicle">
+      <br />
+      <p>Please click on a Vehicle...</p>
+    </div>
+
+</div>
+
+<div>
+  <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+
+   
+    <ng-container matColumnDef="first_name">
+      <th mat-header-cell *matHeaderCellDef> first name. </th>
+      <td mat-cell *matCellDef="let element; let i= index;">
+        <ng-container *ngIf="i === currentIndex" > 
+          <mat-form-field >
+           
+            <input matInput  [(ngModel)]="element.first_name">
+          </mat-form-field>  
+        </ng-container>
+        <ng-container *ngIf="i !== currentIndex" > {{element.first_name}} </ng-container>
+      </td>
+    </ng-container>
+  
+    <!-- Name Column -->
+    <ng-container matColumnDef="last_name">
+      <th mat-header-cell *matHeaderCellDef> Last Name </th>
+      <td mat-cell *matCellDef="let element"> {{element.last_name}} </td>
+    </ng-container>
+    <ng-container matColumnDef="email">
+      <th mat-header-cell *matHeaderCellDef> Email </th>
+      <td mat-cell *matCellDef="let element"> {{element.email}} </td>
+    </ng-container>
+    <ng-container matColumnDef="car_make">
+      <th mat-header-cell *matHeaderCellDef> Car Make </th>
+      <td mat-cell *matCellDef="let element"> {{element.car_make}} </td>
+    </ng-container>
+    <ng-container matColumnDef="car_model">
+      <th mat-header-cell *matHeaderCellDef> Car Model </th>
+      <td mat-cell *matCellDef="let element"> {{element.car_model}} </td>
+    </ng-container>
+    <ng-container matColumnDef="manufactured_date">
+      <th mat-header-cell *matHeaderCellDef> Manufactured Date </th>
+      <td mat-cell *matCellDef="let element"> {{ element.manufactured_date | date }}  </td>
+    </ng-container>
+    <ng-container cdkColumnDef="deleteAction">
+      <th mat-header-cell *matHeaderCellDef> Action </th>
+      <td mat-cell *matCellDef="let element; let i=index">
+        <i class="material-icons" (click)="onRowClicked(i)">
+          create
+          </i>
+          <i class="material-icons" (click)="update(i)">
+            save
+            </i>
+            <i class="material-icons" (click)="delete(i)">
+              delete
+              </i>
+      </td>
+  </ng-container> 
+  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+  <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  
+  </table>
+  <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+</div>

@@ -7,7 +7,7 @@ import { VehicleListComponent } from './components/vehicle-list/vehicle-list.com
 const routes: Routes = [
   { path: '', redirectTo: 'api/vehicle', pathMatch: 'full' },
   { path: 'api/vehicle', component: VehicleListComponent },
-  { path: 'api/vehicle/:id', component: VehicleDetailsComponent },
+  { path: 'api/vehiclegraph', component: VehicleDetailsComponent },
   { path: 'api/upload', component: UploadFilesComponent }
 ];
 

@@ -15,6 +15,7 @@ import { UploadFilesComponent } from './components/upload-files/upload-files.com
 import { CdkTableModule } from '@angular/cdk/table';
 import { MatIconModule} from '@angular/material/icon';
 import {MatSnackBarModule} from '@angular/material/snack-bar';
+import { GraphQLModule } from './graphql.module';
 
 @NgModule({
   declarations: [
@@ -33,7 +34,8 @@ import {MatSnackBarModule} from '@angular/material/snack-bar';
     MatPaginatorModule,
     CdkTableModule,
     MatIconModule,
-    MatSnackBarModule
+    MatSnackBarModule,
+    GraphQLModule
   ],
   providers: [],
   bootstrap: [AppComponent]

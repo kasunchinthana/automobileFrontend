@@ -17,9 +17,9 @@ export class VehicleListComponent implements OnInit {
     vehicles?: Vehicle[];
     currentVehicle?: Vehicle;
     currentIndex = -1;
-    car_model = '';
+    carModel = '';
     resp: any = {};
-    displayedColumns: string[] = ['first_name', 'last_name','email','car_make','car_model','manufactured_date','deleteAction'];
+    displayedColumns: string[] = ['firstName', 'lastName','email','carMake','carModel','manufacturedDate','deleteAction'];
   // dataSource : Vehicle[];
     // datasource 
     dataSource = new MatTableDataSource<Vehicle>([]);
@@ -31,21 +31,26 @@ export class VehicleListComponent implements OnInit {
 
       ngOnInit(): void {
       this.apollo.query({
-        query: gql `{vehicles(page:1,newest:false) {
-          id
-          first_name
-          last_name
-          email
-          car_make
-          car_model
-          vin_number
-          manufactured_date }
-      }`
-      }).subscribe(res => {
+        query: gql `{
+          allVehicles (carModel:""){ 
+            id           
+                  firstName
+                  lastName
+                  email
+                  carMake
+                  carModel
+                  vinNumber
+                  manufacturedDate
+                  ageOfVehicle
+                        
+          }
+		    }`
+       }).subscribe( 
+        res => {
         this.resp = res;
         this.data = this.resp.data;
-        this.dataSource.data = this.resp.data.vehicles;
-        this.vehicles = this.resp.data.vehicles
+        this.dataSource.data = this.resp.data.allVehicles;
+        this.vehicles = this.resp.data.allVehicles
         console.log(this.data);
         console.log(this.dataSource.data);
       //  this.isLoadingResults = false;
@@ -53,47 +58,45 @@ export class VehicleListComponent implements OnInit {
     }
     searchCarModel(): void{
       
-    // &car_model = this.car_model;
+      //this.carModel =
       this.apollo.query({
         query: gql `
-          query($car_model:String!)
-            { vehicleByModel(carModel:$car_model)
-              {
-                id
-                first_name
-                last_name
+          query($carModel:String!){ 
+            allVehicles(carModel:$carModel){
+              id
+                firstName
+                lastName
                 email
-                car_make
-                car_model
-                vin_number
-                manufactured_date 
+                carMake
+                carModel
+                vinNumber
+                manufacturedDate 
             }
             }
         `,
       variables: {
-        car_model: this.car_model
+        carModel: this.carModel
       }
           
       }).subscribe(res => {
         this.resp = res;
         this.data = this.resp.data;
-        this.dataSource.data = this.resp.data.vehicles;
-        if(this.resp.data.vehicleByModel.length===undefined){
+        this.dataSource.data = this.resp.data.allVehicles;
+        if(this.resp.data.allVehicles.length===undefined){
           this.dataSource.data  = [{
-            age_of_vehicle: this.resp.data.vehicleByModel.age_of_vehicle,
-            car_make: this.resp.data.vehicleByModel.car_make,
-            car_model: this.resp.data.vehicleByModel.car_model,
-            email: this.resp.data.vehicleByModel.email,
-            first_name: this.resp.data.vehicleByModel.first_name,
-            id: this.resp.data.vehicleByModel.id,
-            last_name: this.resp.data.vehicleByModel.last_name,
-            manufactured_date: this.resp.data.vehicleByModel.manufactured_date,
-            vin_number: this.resp.data.vehicleByModel.vin_number,
+            // //carMake: this.resp.data.allVehicles[0].carMake,
+            // carModel: this.resp.data.allVehicles.carModel,
+            // email: this.resp.data.allVehicles.email,
+            // firstName: this.resp.data.allVehicles.firstName,
+            // id: this.resp.data.allVehicles.id,
+            // last_name: this.resp.data.allVehicles.last_name,
+            // manufacturedDate: this.resp.data.allVehicles.manufacturedDate,
+            // vinNumber: this.resp.data.allVehicles.vinNumber,
           }];
-          this.vehicles = this.resp.data.vehicleByModel;
+          this.vehicles = this.resp.data.allVehicles;
           }else{
-            this.vehicles = this.resp.data.vehicleByModel;
-            this.dataSource.data=this.resp.data.vehicleByModel;
+            this.vehicles = this.resp.data.allVehicles;
+            this.dataSource.data=this.resp.data.allVehicles;
           }
       
       //  this.isLoadingResults = false;
@@ -104,28 +107,28 @@ export class VehicleListComponent implements OnInit {
       let updatedVehicle = this.vehicles[index];
       this.apollo.mutate({
         mutation: gql`
-        mutation updateVehicle {
-          updateVehicle(id: 1,first_name: "Florind",
-            last_name: "Castagnone",
-            email: "Butere",
-            car_make: "Volvo",
-            car_model: "240",
-            vin_number: "WBAKB0C56BC647513",
-            manufactured_date: "548879400000",
-            age_of_vehicle: "33.87849045535261") {
-            first_name
-            last_name
+        mutation  {
+          updateVehicleById(id: "1"
+        firstName: "tildaaa") {
+                id
+                firstName
+                lastName
+                email
+                carMake
+                carModel
+                vinNumber
+                manufacturedDate 
           }
         }
       `,
-        variables: {
-          id: this.car_model
+        variables: {id:"1",
+          firstName: "this.vehicles"
         }
       }).subscribe(res => {
         this.resp = res;
         this.data = this.resp.data;
-        this.dataSource.data = this.resp.data.vehicles;
-        this.vehicles = this.resp.data.vehicles
+        this.dataSource.data = this.resp.data.updateVehicleById;
+        this.vehicles = this.resp.data.updateVehicleById;
         console.log(this.data);
         console.log(this.dataSource.data);
       //  this.isLoadingResults = false;

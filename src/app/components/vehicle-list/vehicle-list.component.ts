@@ -19,20 +19,12 @@ export class VehicleListComponent implements OnInit {
     currentIndex = -1;
     carModel = '';
     name = "kasun";
-    //@Input()
-  //   firstName : string;
-  //   @Input()
-  // version: number;
-  // @Output()
-  // readonly release: EventEmitter<void> = new EventEmitter();
 
     id ='';
     resp: any = {};
     displayedColumns: string[] = ['firstName', 'lastName','email','carMake','carModel','manufacturedDate','deleteAction'];
-  // dataSource : Vehicle[];
-    // datasource 
+
     dataSource = new MatTableDataSource<Vehicle>([]);
-    //dataSource = new MatTableDataSource<Vehicle>[];
     @ViewChild(MatPaginator) paginator: MatPaginator;
     data: any;
     
@@ -43,8 +35,6 @@ export class VehicleListComponent implements OnInit {
       }
 
     searchCarModel(): void{
-      
-      //this.carModel =
       this.apollo.query({
         query: gql `
           query($carModel:String!){ 
@@ -67,25 +57,9 @@ export class VehicleListComponent implements OnInit {
       }).subscribe(res => {
         this.resp = res;
         this.data = this.resp.data;
-        this.dataSource.data = this.resp.data.allVehicles;
-        if(this.resp.data.allVehicles.length===undefined){
-          this.dataSource.data  = [{
-            // //carMake: this.resp.data.allVehicles[0].carMake,
-            // carModel: this.resp.data.allVehicles.carModel,
-            // email: this.resp.data.allVehicles.email,
-            // firstName: this.resp.data.allVehicles.firstName,
-            // id: this.resp.data.allVehicles.id,
-            // last_name: this.resp.data.allVehicles.last_name,
-            // manufacturedDate: this.resp.data.allVehicles.manufacturedDate,
-            // vinNumber: this.resp.data.allVehicles.vinNumber,
-          }];
-          this.vehicles = this.resp.data.allVehicles;
-          }else{
-            this.vehicles = this.resp.data.allVehicles;
-            this.dataSource.data=this.resp.data.allVehicles;
-          }
-      
-      //  this.isLoadingResults = false;
+        this.vehicles = this.recreateJsonObject(this.data.allVehicles) ;
+        this.dataSource.data = this.vehicles;
+       
       });
     }
     
@@ -113,32 +87,10 @@ export class VehicleListComponent implements OnInit {
         this.currentIndex=-1;
         this.resp = res;
         this.data = this.resp.data;
-       this.retrieveVehicle();
-       // this.dataSource.data = this.resp.data.updateVehicleById;
-       // this.dataSource.data = this.recreateJsonObject(this.resp.data.updateVehicleById) ;
-        // if(this.data instanceof Object){
-        // this.dataSource.data  = [{
-        //     //carMake: this.resp.data.allVehicles[0].carMake,
-        //     carModel : this.resp.data.updateVehicleById.carModel,
-        //      email : this.resp.data.updateVehicleById.email,
-        //     firstName :this.resp.data.updateVehicleById.firstName,
-        //      id : this.resp.data.updateVehicleById.id,
-        //      lastName : this.resp.data.updateVehicleById.lastName,
-        //      manufacturedDate :this.resp.data.updateVehicleById.manufacturedDate,
-        //      vinNumber : this.resp.data.updateVehicleById.vinNumber,
-        //   }];
-        // }
-        
-       // this.vehicles = this.resp.data.updateVehicleById;
-       // console.log(this.data);
-       // console.log(this.dataSource.data);
-      //  this.isLoadingResults = false;
-      });
-        
-          
+       this.retrieveVehicle();       
+      });         
     }
     onRowClicked(index): void {
-    //  this.release.emit();
     this.currentIndex = index;
     }
 
@@ -149,7 +101,6 @@ export class VehicleListComponent implements OnInit {
   }
 
    refreshList(): void {
-    //this.retrieveVehicle();
     this.currentVehicle = undefined;
     this.currentIndex = -1;
   }
@@ -172,18 +123,13 @@ export class VehicleListComponent implements OnInit {
 		    }`
        }).subscribe( 
         res => {
-         this.resp = res;
-         this.data = this.resp.data;
-       // let xyz any = '';
-       //let xyz: any = [];
-        //Object.assign(xyz,this.data.allVehicles);
-        this.vehicles = this.recreateJsonObject(this.data.allVehicles) ;
-        this.dataSource.data = this.vehicles;
-        
-        //this.vehicles = this.resp.data.allVehicles
-        console.log(this.data);
-        console.log(this.dataSource.data);
-        this.currentIndex=-1;
+          this.resp = res;
+          this.data = this.resp.data;
+          this.vehicles = this.recreateJsonObject(this.data.allVehicles) ;
+          this.dataSource.data = this.vehicles;
+          console.log(this.data);
+          console.log(this.dataSource.data);
+          this.currentIndex=-1;
       //  this.isLoadingResults = false;
       });
   } 
@@ -221,84 +167,30 @@ export class VehicleListComponent implements OnInit {
       return JSON.parse(jsonStr);
     }
   }
-}
-  
-  
-    
 
-  // refreshList(): void {
-  //   this.retrieveVehicle();
-  //   this.currentVehicle = undefined;
-  //   this.currentIndex = -1;
-  // }
+  delete(index): void {
+    let updatedVehicle = this.vehicles[index];
+    this.apollo.mutate({ mutation: gql`   
+     mutation deleteVehicle($id:ID!){
+        deleteVehicle(id:$id ){  
+            id
+            firstName
+            lastName
+            email
+            carMake
+            carModel
+            vinNumber
+            manufacturedDate
+            ageOfVehicle    
+        }
+      }`,
+      variables: {id:updatedVehicle.id}
+       }).subscribe(res=>{
+        this.currentIndex=-1;
+        this.resp = res;
+        this.data = this.resp.data;
+        this.retrieveVehicle();  
+    });
+  }
+}  
 
-  // onRowClicked(index): void {
-  //   this.currentIndex = index;
-  // }
-  // searchCarModel(): void {
-  //   this.vehicleService.findByCarModel(this.car_model).subscribe((res:any ) => {
-    
-  //       //this.dataSource = new MatTableDataSource(data);
-  //       if(res.length===undefined){
-  //       this.dataSource.data  = [{
-  //         age_of_vehicle: res.age_of_vehicle,
-  //         car_make: res.car_make,
-  //         car_model: res.car_model,
-  //         email: res.email,
-  //         first_name: res.first_name,
-  //         id: res.id,
-  //         last_name: res.last_name,
-  //         manufactured_date: res.manufactured_date,
-  //         vin_number: res.vin_number,
-  //       }];
-  //       this.vehicles = res;
-  //       }else{
-  //         this.vehicles = res;
-  //         this.dataSource.data=res;
-  //       }
-     
-        
-  //     },
-  //     error => {
-  //       console.log(error);
-  //     });
-  // }
-  
-
-  // delete(index): void {
-  //   let updatedVehicle = this.vehicles[index];
-  //   this.apollo.mutate({ mutation: gql` mutation  { 
-  //     deleteVehicle{
-  //       deleteVehicle(id: "006a5f3e-8850-48c9-8de5-ef9d2c9516c6" ){  
-  //           id
-  //           firstName
-  //           lastName
-  //           email
-  //           carMake
-  //           carModel
-  //           vinNumber
-  //           manufacturedDate
-  //           ageOfVehicle    
-  //       }
-  //     }
-
-
-
-  //   this.vehicleService.delete(this.currentVehicle.id)
-  //     .subscribe(
-  //       response => {
-  //         console.log(response);
-  //         this._snackBar.open('succesfully deleted', '', {
-  //           duration: 2000,
-  //         });
-  //         this.currentIndex=-1;
-  //        // this.router.navigate(['api/vehicle']);
-  //       },
-  //       error => {
-  //         console.log(error);
-  //         this._snackBar.open('error', '', {
-  //           duration: 2000,
-  //         });
-  //         this.currentIndex=-1;
-  //       });
-  //     }

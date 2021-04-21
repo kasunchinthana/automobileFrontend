@@ -18,6 +18,8 @@ import {MatSnackBarModule} from '@angular/material/snack-bar';
 import { GraphQLModule } from './graphql.module';
 import { DownloadCsvComponent } from './components/download-csv/download-csv.component';
 import { ToastrModule } from 'ngx-toastr';
+import { MatInputModule } from '@angular/material/input';
+import { MatFormFieldModule } from '@angular/material/form-field';
 
 @NgModule({
   declarations: [
@@ -39,7 +41,9 @@ import { ToastrModule } from 'ngx-toastr';
     MatIconModule,
     MatSnackBarModule,
     GraphQLModule,
-    ToastrModule.forRoot()
+    ToastrModule.forRoot(),
+    MatFormFieldModule,
+    MatInputModule
   ],
   providers: [],
   bootstrap: [AppComponent]

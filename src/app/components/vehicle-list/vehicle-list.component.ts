@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { Vehicle } from 'src/app/model/vehicle';
@@ -18,7 +18,14 @@ export class VehicleListComponent implements OnInit {
     currentVehicle?: Vehicle;
     currentIndex = -1;
     carModel = '';
-    firstName = '';
+    name = "kasun";
+    //@Input()
+  //   firstName : string;
+  //   @Input()
+  // version: number;
+  // @Output()
+  // readonly release: EventEmitter<void> = new EventEmitter();
+
     id ='';
     resp: any = {};
     displayedColumns: string[] = ['firstName', 'lastName','email','carMake','carModel','manufacturedDate','deleteAction'];
@@ -35,7 +42,6 @@ export class VehicleListComponent implements OnInit {
         this.retrieveVehicle();
       }
 
-      
     searchCarModel(): void{
       
       //this.carModel =
@@ -104,24 +110,27 @@ export class VehicleListComponent implements OnInit {
           firstName: updatedVehicle.firstName
         }
       }).subscribe(res => {
+        this.currentIndex=-1;
         this.resp = res;
         this.data = this.resp.data;
-        this.dataSource.data = this.resp.data.updateVehicleById;
-        if(this.data instanceof Object){
-        this.dataSource.data  = [{
-            //carMake: this.resp.data.allVehicles[0].carMake,
-            carModel : this.resp.data.updateVehicleById.carModel,
-             email : this.resp.data.updateVehicleById.email,
-            firstName :this.resp.data.updateVehicleById.firstName,
-             id : this.resp.data.updateVehicleById.id,
-             lastName : this.resp.data.updateVehicleById.lastName,
-             manufacturedDate :this.resp.data.updateVehicleById.manufacturedDate,
-             vinNumber : this.resp.data.updateVehicleById.vinNumber,
-          }];
-        }
+       this.retrieveVehicle();
+       // this.dataSource.data = this.resp.data.updateVehicleById;
+       // this.dataSource.data = this.recreateJsonObject(this.resp.data.updateVehicleById) ;
+        // if(this.data instanceof Object){
+        // this.dataSource.data  = [{
+        //     //carMake: this.resp.data.allVehicles[0].carMake,
+        //     carModel : this.resp.data.updateVehicleById.carModel,
+        //      email : this.resp.data.updateVehicleById.email,
+        //     firstName :this.resp.data.updateVehicleById.firstName,
+        //      id : this.resp.data.updateVehicleById.id,
+        //      lastName : this.resp.data.updateVehicleById.lastName,
+        //      manufacturedDate :this.resp.data.updateVehicleById.manufacturedDate,
+        //      vinNumber : this.resp.data.updateVehicleById.vinNumber,
+        //   }];
+        // }
         
-        this.vehicles = this.resp.data.updateVehicleById;
-        console.log(this.data);
+       // this.vehicles = this.resp.data.updateVehicleById;
+       // console.log(this.data);
        // console.log(this.dataSource.data);
       //  this.isLoadingResults = false;
       });
@@ -129,6 +138,7 @@ export class VehicleListComponent implements OnInit {
           
     }
     onRowClicked(index): void {
+    //  this.release.emit();
     this.currentIndex = index;
     }
 
@@ -162,16 +172,55 @@ export class VehicleListComponent implements OnInit {
 		    }`
        }).subscribe( 
         res => {
-        this.resp = res;
-        this.data = this.resp.data;
-        this.dataSource.data = this.resp.data.allVehicles;
-        this.vehicles = this.resp.data.allVehicles
+         this.resp = res;
+         this.data = this.resp.data;
+       // let xyz any = '';
+       //let xyz: any = [];
+        //Object.assign(xyz,this.data.allVehicles);
+        this.vehicles = this.recreateJsonObject(this.data.allVehicles) ;
+        this.dataSource.data = this.vehicles;
+        
+        //this.vehicles = this.resp.data.allVehicles
         console.log(this.data);
         console.log(this.dataSource.data);
+        this.currentIndex=-1;
       //  this.isLoadingResults = false;
       });
   } 
-  
+
+  y(event,element){
+    element.firstName = event;
+  }
+
+  public recreateJsonObject(object: any): any {
+
+    let obj: string = this.objectToJson(object);
+    return this.jsonStringToObject(obj);
+  }
+
+  /**
+   * convert and return given object to json string
+   * @param object
+   * @returns {string}
+   */
+   public objectToJson(object: any): string {
+    if (object) {
+      return JSON.stringify(object);
+    } else {
+      return null;
+    }
+  }
+
+  /**
+   * create & return given json string to json object
+   * @param {string} jsonStr
+   * @returns {Object}
+   */
+  public jsonStringToObject(jsonStr: string): Object {
+    if (jsonStr && jsonStr.length > 0) {
+      return JSON.parse(jsonStr);
+    }
+  }
 }
   
   

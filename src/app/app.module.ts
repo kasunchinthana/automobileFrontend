@@ -16,13 +16,16 @@ import { CdkTableModule } from '@angular/cdk/table';
 import { MatIconModule} from '@angular/material/icon';
 import {MatSnackBarModule} from '@angular/material/snack-bar';
 import { GraphQLModule } from './graphql.module';
+import { DownloadCsvComponent } from './components/download-csv/download-csv.component';
+import { ToastrModule } from 'ngx-toastr';
 
 @NgModule({
   declarations: [
     AppComponent,
     VehicleDetailsComponent,
     VehicleListComponent,
-    UploadFilesComponent
+    UploadFilesComponent,
+    DownloadCsvComponent
   ],
   imports: [
     BrowserModule,
@@ -35,7 +38,8 @@ import { GraphQLModule } from './graphql.module';
     CdkTableModule,
     MatIconModule,
     MatSnackBarModule,
-    GraphQLModule
+    GraphQLModule,
+    ToastrModule.forRoot()
   ],
   providers: [],
   bootstrap: [AppComponent]

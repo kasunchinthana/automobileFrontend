@@ -18,6 +18,8 @@ export class VehicleListComponent implements OnInit {
     currentVehicle?: Vehicle;
     currentIndex = -1;
     carModel = '';
+    firstName = '';
+    id ='';
     resp: any = {};
     displayedColumns: string[] = ['firstName', 'lastName','email','carMake','carModel','manufacturedDate','deleteAction'];
   // dataSource : Vehicle[];
@@ -30,32 +32,10 @@ export class VehicleListComponent implements OnInit {
     constructor(private apollo: Apollo,private vehicleService:VehicleService,private _snackBar: MatSnackBar) { }
 
       ngOnInit(): void {
-      this.apollo.query({
-        query: gql `{
-          allVehicles (carModel:""){ 
-            id           
-                  firstName
-                  lastName
-                  email
-                  carMake
-                  carModel
-                  vinNumber
-                  manufacturedDate
-                  ageOfVehicle
-                        
-          }
-		    }`
-       }).subscribe( 
-        res => {
-        this.resp = res;
-        this.data = this.resp.data;
-        this.dataSource.data = this.resp.data.allVehicles;
-        this.vehicles = this.resp.data.allVehicles
-        console.log(this.data);
-        console.log(this.dataSource.data);
-      //  this.isLoadingResults = false;
-      });
-    }
+        this.retrieveVehicle();
+      }
+
+      
     searchCarModel(): void{
       
       //this.carModel =
@@ -107,9 +87,8 @@ export class VehicleListComponent implements OnInit {
       let updatedVehicle = this.vehicles[index];
       this.apollo.mutate({
         mutation: gql`
-        mutation  {
-          updateVehicleById(id: "1"
-        firstName: "tildaaa") {
+        mutation updateVehicleById($id:ID!,$firstName:String){
+          updateVehicleById(id: $id, firstName: $firstName) {
                 id
                 firstName
                 lastName
@@ -120,17 +99,30 @@ export class VehicleListComponent implements OnInit {
                 manufacturedDate 
           }
         }
-      `,
-        variables: {id:"1",
-          firstName: "this.vehicles"
+        `,
+        variables: {id:updatedVehicle.id,
+          firstName: updatedVehicle.firstName
         }
       }).subscribe(res => {
         this.resp = res;
         this.data = this.resp.data;
         this.dataSource.data = this.resp.data.updateVehicleById;
+        if(this.data instanceof Object){
+        this.dataSource.data  = [{
+            //carMake: this.resp.data.allVehicles[0].carMake,
+            carModel : this.resp.data.updateVehicleById.carModel,
+             email : this.resp.data.updateVehicleById.email,
+            firstName :this.resp.data.updateVehicleById.firstName,
+             id : this.resp.data.updateVehicleById.id,
+             lastName : this.resp.data.updateVehicleById.lastName,
+             manufacturedDate :this.resp.data.updateVehicleById.manufacturedDate,
+             vinNumber : this.resp.data.updateVehicleById.vinNumber,
+          }];
+        }
+        
         this.vehicles = this.resp.data.updateVehicleById;
         console.log(this.data);
-        console.log(this.dataSource.data);
+       // console.log(this.dataSource.data);
       //  this.isLoadingResults = false;
       });
         
@@ -139,12 +131,49 @@ export class VehicleListComponent implements OnInit {
     onRowClicked(index): void {
     this.currentIndex = index;
     }
-}
-  //}
-  // ngAfterViewInit() {
-  //  this.dataSource.paginator = this.paginator;
+
+    
+  ngAfterViewInit() {
+   this.dataSource.paginator = this.paginator;
    
-  // }
+  }
+
+   refreshList(): void {
+    //this.retrieveVehicle();
+    this.currentVehicle = undefined;
+    this.currentIndex = -1;
+  }
+  
+  retrieveVehicle(){
+    this.apollo.query({
+        query: gql `{
+          allVehicles (carModel:""){ 
+            id           
+                  firstName
+                  lastName
+                  email
+                  carMake
+                  carModel
+                  vinNumber
+                  manufacturedDate
+                  ageOfVehicle
+                        
+          }
+		    }`
+       }).subscribe( 
+        res => {
+        this.resp = res;
+        this.data = this.resp.data;
+        this.dataSource.data = this.resp.data.allVehicles;
+        this.vehicles = this.resp.data.allVehicles
+        console.log(this.data);
+        console.log(this.dataSource.data);
+      //  this.isLoadingResults = false;
+      });
+  } 
+  
+}
+  
   
     
 
@@ -189,6 +218,23 @@ export class VehicleListComponent implements OnInit {
 
   // delete(index): void {
   //   let updatedVehicle = this.vehicles[index];
+  //   this.apollo.mutate({ mutation: gql` mutation  { 
+  //     deleteVehicle{
+  //       deleteVehicle(id: "006a5f3e-8850-48c9-8de5-ef9d2c9516c6" ){  
+  //           id
+  //           firstName
+  //           lastName
+  //           email
+  //           carMake
+  //           carModel
+  //           vinNumber
+  //           manufacturedDate
+  //           ageOfVehicle    
+  //       }
+  //     }
+
+
+
   //   this.vehicleService.delete(this.currentVehicle.id)
   //     .subscribe(
   //       response => {

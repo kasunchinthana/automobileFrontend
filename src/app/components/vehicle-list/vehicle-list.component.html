@@ -98,9 +98,12 @@
     <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
     
     </table>
-    <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+    <mat-paginator #paginator [length]="resultsLength"  [pageSizeOptions]="[100]" showFirstLastButtons
+    [pageIndex]="currentPage" (page)="getPaginatorData($event)"
+    ></mat-paginator>
   </div>
-  <mat-form-field >            
+  
+  <!-- <mat-form-field >            
     <input matInput  #xx='ngModel' name="name" [(ngModel)]="name">
-  </mat-form-field>  
+  </mat-form-field>   -->
   

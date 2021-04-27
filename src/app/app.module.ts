@@ -20,6 +20,7 @@ import { DownloadCsvComponent } from './components/download-csv/download-csv.com
 import { ToastrModule } from 'ngx-toastr';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { WebSocketService } from './web-socket.service';
 
 @NgModule({
   declarations: [
@@ -45,7 +46,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
     MatFormFieldModule,
     MatInputModule
   ],
-  providers: [],
+  providers: [WebSocketService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

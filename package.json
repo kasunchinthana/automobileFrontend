@@ -22,10 +22,12 @@
     "@angular/platform-browser-dynamic": "~11.2.7",
     "@angular/router": "~11.2.7",
     "@apollo/client": "^3.0.0",
+    "@types/socket.io-client": "^1.4.36",
     "apollo-angular": "^2.4.0",
     "graphql": "^15.0.0",
     "ngx-toastr": "^13.2.1",
     "rxjs": "~6.6.0",
+    "socket.io-client": "^2.3.1",
     "tslib": "^2.0.0",
     "zone.js": "~0.11.3"
   },

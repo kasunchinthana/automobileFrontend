@@ -1,33 +1,29 @@
 import { Injectable } from "@angular/core";
 import { Observable, Observer } from "rxjs";
-import {io} from 'socket.io-client/build/index';
 
-import * as socketIo from 'socket.io-client';
 import { Socket } from '../app/shared/socket';
+import { ToastrService } from "ngx-toastr";
+import socketIo from 'socket.io-client';
 
 @Injectable()
 export class WebSocketService {
 
     socket: Socket;
     observer: Observer<string>;
-
-    // constructor() {
-    //     this.socket = io('http://localhost:3000');
-    //     console.log(this.socket);
-    //     this.socket.on('alertToClient', (res) => {
-    //         console.log(res);
-    //       })
-    // }
+    constructor(private toastr: ToastrService) { }
     
-    getQuotes() : Observable<string> {
+    getListen() : Observable<string> {
         console.log("bbbbbbbbbbbbbbbbb");
-        this.socket = io('http://localhost:4000');
+        this.socket = socketIo('http://localhost:3000');
+        
         this.socket.on('alertToClient', (res) => {
-          console.log(res);
+          this.toastr.success('Downloaded CSV File', res, {
+            timeOut: 10000,
+          });
           this.observer.next(res);
         });
-    
-        return this.listen("alertToClient");
+        return this.createObservable();
+       
       }
 
       createObservable() : Observable<string> {
@@ -36,13 +32,13 @@ export class WebSocketService {
         });
     }
     listen(eventname: string) : Observable<any> {
-        console.log(eventname);
+      this.toastr.success('updated!',eventname ); 
         return new Observable((subscriber) => {
            // console.log(subscriber);
             this.socket.on(eventname, (data) => {
                 console.log(data);
                 subscriber.next(data);
-                console.log(data);
+               
             })
         })
     }

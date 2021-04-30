@@ -12,35 +12,6 @@
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   <link type="text/css" rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" />
 
-  <!-- <script src="src\socket.io.js"></script>
-  <script>
-    const socket = io('http://localhost:3000');
-    socket.on('connect', function() {
-      console.log('Connnnected');
-
-      socket.emit('events', { test: 'test' });
-      socket.emit('identity', 0, response =>
-        console.log('Identity:', response),
-      );
-    });
-    socket.on('events', function(data) {
-      console.log('event', data);
-    });
-    socket.on('findAll', function(data) {
-      console.log('findAllevent', data);
-    });
-    socket.on('alertToClient', function(data) {
-      console.log('alertToClient', data);
-    });
-    io.on('connection', (socket) => {
-    socket.on('chat message', (msg) => {
-      console.log('message: ' + msg);
-      });
-    });
-    socket.on('disconnect', function() {
-      console.log('Disconnected');
-    });
-  </script> -->
 </head>
 <body class="mat-typography">
   <app-root></app-root>

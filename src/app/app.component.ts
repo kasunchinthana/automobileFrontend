@@ -1,7 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { WebSocketService } from './web-socket.service';
-import io from 'socket.io-client';
 import { Socket } from '../app/shared/socket';
 import { ToastrService } from 'ngx-toastr';
 
@@ -25,19 +24,19 @@ export class AppComponent implements OnInit, OnDestroy {
    }
 
   ngOnInit() {
-    console.log('TESTtttttttttttttttttttttttt');
-    this.sub = this.dataService.getQuotes()
-        .subscribe(quote => {
-          this.stockQuote = quote;  
-        });
-        console.log(this.stockQuote);
-        this.updateFeedback(this.stockQuote);
+    // console.log('TESTtttttttttttttttttttttttt');
+    // this.sub = this.dataService.getQuotes()
+    //     .subscribe(quote => {
+    //       this.stockQuote = quote;  
+    //     });
+    //     console.log(this.stockQuote);
+    //     this.updateFeedback(this.stockQuote);
   }
 
   updateFeedback(data: any){
     console.log("upaseteee");
-    this.feedback = "${data} is typing a message";
-    this.toastr.success('Hello world frm!',this.feedback ); 
+    this.feedback = this.data+"is typing a message";
+    this.toastr.success('updating',this.feedback ); 
       
   }
   ngOnDestroy() {

@@ -1,51 +1,24 @@
 <div *ngIf="currentFile" class="progress">
-    <div
-      class="progress-bar progress-bar-info progress-bar-striped"
-      role="progressbar"
-      attr.aria-valuenow="{{ progress }}"
-      aria-valuemin="0"
-      aria-valuemax="100"
-      [ngStyle]="{ width: progress + '%' }"
-    >
-      {{ progress }}%
-    </div>
+  <div class="progress-bar progress-bar-info progress-bar-striped" role="progressbar"
+    attr.aria-valuenow="{{ progress }}" aria-valuemin="0" aria-valuemax="100" [ngStyle]="{ width: progress + '%' }">
+    {{ progress }}%
   </div>
-  
-  <label class="btn btn-default">
-    <input type="file" (change)="selectFile($event)" />
-  </label>
-  <button class="btn btn-success" [disabled]="!selectedFiles" (click)="upload()">
-    Upload
-  </button>
-  
-  <div class="alert alert-light" role="alert">{{ message }}</div>
-  
-  <div class="card">
-    <div class="card-header">List of Files</div>
-    <ul
-      class="list-group list-group-flush"
-      *ngFor="let file of fileInfos | async"
-    >
-      <li class="list-group-item">
-        <a href="{{ file.url }}">{{ file.name }}</a>
-      </li>
-    </ul>
-  </div>
-  <!-- <div>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js"></script>
-    <script>
-      const socket = io('http://localhost:4001');
+</div>
 
-      socket.on('connection', data => console.log(data));
-      socket.on('newIdea', data => {
-        console.log(data);
-        document.getElementById('app').innerHTML += `
-          <li>
-            <div>
-              <h2>${data.row}</h2>
-            </div>
-          </li>
-        `;
-      });
-    </script>
-  </div> -->
+<label class="btn btn-default">
+  <input type="file" (change)="selectFile($event)" />
+</label>
+<button class="btn btn-success" [disabled]="!selectedFiles" (click)="upload()">
+  Upload
+</button>
+
+<div class="alert alert-light" role="alert">{{ message }}</div>
+
+<div class="card">
+  <div class="card-header">List of Files</div>
+  <ul class="list-group list-group-flush" *ngFor="let file of fileInfos | async">
+    <li class="list-group-item">
+      <a href="{{ file.url }}">{{ file.name }}</a>
+    </li>
+  </ul>
+</div>

@@ -10,7 +10,7 @@ import { UploadFilesService } from '../../services/upload-files.service';
 })
 export class UploadFilesComponent implements OnInit {
 
-  
+
   selectedFiles: FileList;
   currentFile: File;
   progress = 0;

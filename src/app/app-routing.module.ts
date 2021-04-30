@@ -8,7 +8,6 @@ import {DownloadCsvComponent} from './components/download-csv/download-csv.compo
 const routes: Routes = [
   { path: '', redirectTo: 'api/vehicle', pathMatch: 'full' },
   { path: 'api/vehicle', component: VehicleListComponent },
-  { path: 'api/vehiclegraph', component: VehicleDetailsComponent },
   { path: 'api/upload', component: UploadFilesComponent },
   { path: 'api/download', component: DownloadCsvComponent }
 ];

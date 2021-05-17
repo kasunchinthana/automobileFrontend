@@ -6,6 +6,8 @@ describe('VehicleListComponent', () => {
   let component: VehicleListComponent;
   let fixture: ComponentFixture<VehicleListComponent>;
 
+  let abc = true;
+
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [ VehicleListComponent ]
@@ -19,7 +21,12 @@ describe('VehicleListComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
+  // it('should create', () => {
+  //   expect(component).toBeTruthy();
+  // });
+
+  it('should vehicle list', () => {
+    const result = component.searchCarModel();
+    expect(result).toContain({firstName:"nuwan"})
   });
 });
